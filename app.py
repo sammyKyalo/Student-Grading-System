@@ -30,8 +30,9 @@ if uploaded_file is not None:
         data = pd.read_csv(uploaded_file)
     except Exception as e:
         data = pd.read_excel(uploaded_file)
-      
+    st.write("Data has been successfully uploaded.")  
 
     if st.button('Calculate Grades'):
         result = calculate_grades(data)
-        st.write(result)  
+        st.write(result) 
+ 
