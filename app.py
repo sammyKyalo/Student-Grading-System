@@ -18,7 +18,7 @@ def calculate_grades(df):
     return df
 
 def create_mean_scores_table(df):
-    df = df.iloc[:, 1:-1]  # Exclude the first and last columns
+    df = df.iloc[:, 1:-1]  
 
     mean_scores = df.mean()
     sorted_scores = mean_scores.sort_values(ascending=False)
@@ -67,7 +67,7 @@ def page1():
             result = calculate_grades(data)
             st.session_state['result'] = result 
 
-            # Create two columns
+           
             col1, col2 = st.columns(2)
 
             with col1:
@@ -101,7 +101,7 @@ pages = {
     "Student Performance Analysis": page2,
 }
 
-# Render the page selection as a radio button in the sidebar
+
 selected_page = st.sidebar.radio("Select your page:", tuple(pages.keys()))
 
 
