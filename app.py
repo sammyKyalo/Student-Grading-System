@@ -1,6 +1,14 @@
 import base64
 import pandas as pd
 import streamlit as st
+from datetime import datetime
+import pytz
+import time
+
+def get_current_time():
+    eat_timezone = pytz.timezone('Africa/Nairobi')
+    current_time = datetime.now(eat_timezone)
+    return current_time.strftime("%Y-%m-%d %H:%M:%S")
 
 def calculate_grades(df):
     for col in df.columns[1:]:
@@ -67,7 +75,6 @@ def page1():
             result = calculate_grades(data)
             st.session_state['result'] = result 
 
-           
             col1, col2 = st.columns(2)
 
             with col1:
@@ -95,14 +102,19 @@ def page2():
     else:
         st.write("No data available. Please calculate grades on the first page.")
 
+# Display the current time
+st.title('Current Time')
+time_placeholder = st.empty()
+while True:
+    current_time = get_current_time()
+    time_placeholder.write(f"<h2 style='text-align:right;'>{current_time}</h2>", unsafe_allow_html=True)
+    time.sleep(1)
 
+# Render pages
+st.title('Student Performance Analysis')
 pages = {
     "Student Grade Calculator": page1,
     "Student Performance Analysis": page2,
 }
-
-
 selected_page = st.sidebar.radio("Select your page:", tuple(pages.keys()))
-
-
 pages[selected_page]()
