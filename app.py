@@ -73,12 +73,12 @@ def page1():
             with col1:
                 st.header("Ranking Table")
                 st.write(result) 
-
+                st.table(result, width=500)
             with col2:
                 st.header("Mean Scores by Subject")
                 mean_scores_table = create_mean_scores_table(result)
                 st.write(mean_scores_table)
-
+                st.table(mean_scores_table, width=100)
 def page2():
     st.title('Student Performance Analysis')
 
