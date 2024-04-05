@@ -3,7 +3,6 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import streamlit as st
-)
 
 def calculate_grades(df):
     for col in df.columns[1:]:
@@ -21,7 +20,7 @@ def calculate_grades(df):
     return df
 
 def create_mean_scores_table(df):
-    df = df.iloc[:, 1:-1]  # Exclude the first and last columns
+    df = df.iloc[:, 1:-1] 
 
     mean_scores = df.mean()
     sorted_scores = mean_scores.sort_values(ascending=False)
@@ -40,10 +39,6 @@ def search_and_filter(student_name, df):
 
 def page1():
     st.title('Student Grade Calculator')
-
-    # Display current time in East African Time (EAT)
-    current_time = get_current_time()
-    st.markdown(f"<h2 style='text-align:center;color:blue;'>Current Time (EAT): {current_time}</h2>", unsafe_allow_html=True)
 
     st.markdown("""
     <style>
@@ -72,9 +67,9 @@ def page1():
 
         if st.button('Calculate Grades'):
             result = calculate_grades(data)
-            st.session_state['result'] = result  # Save the result in the session state
+            st.session_state['result'] = result  
 
-            # Create two columns
+            
             col1, col2 = st.columns(2)
 
             with col1:
@@ -82,11 +77,9 @@ def page1():
                 st.write(result) 
 
             with col2:
-                st.header("Interactive Dashboard:")
-                # Create mean scores table
                 st.header("Mean Scores by Subject")
                 mean_scores_table = create_mean_scores_table(result)
-                st.table(mean_scores_table, width=500)  # Set the width of the table
+                st.write(mean_scores_table)
 
 def page2():
     st.title('Student Performance Analysis')
@@ -99,19 +92,17 @@ def page2():
         search_button = st.button("Search")
         if search_button:
             search_results_placeholder = st.empty()
-            search_and_filter(selected_student, result)  # Use the result from the session state
-            search_results_placeholder.markdown("")  # To prevent re-rendering
+            search_and_filter(selected_student, result)  
+            search_results_placeholder.markdown("")  
     else:
         st.write("No data available. Please calculate grades on the first page.")
 
-# Create a dictionary of pages
+
 pages = {
     "Student Grade Calculator": page1,
     "Student Performance Analysis": page2,
 }
 
-# Render the page selection as a radio button in the sidebar
 selected_page = st.sidebar.radio("Select your page:", tuple(pages.keys()))
 
-# Call the selected page function
 pages[selected_page]()
