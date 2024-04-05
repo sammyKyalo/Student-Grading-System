@@ -36,7 +36,7 @@ def search_and_filter(student_name, df):
         st.write("Student not found.")
 
 def page1():
-    st.title('Student Grade Calculator')
+    st.title('Student Grading System')
 
     st.markdown("""
     <style>
@@ -65,7 +65,7 @@ def page1():
 
         if st.button('Calculate Grades'):
             result = calculate_grades(data)
-            st.session_state['result'] = result  # Save the result in the session state
+            st.session_state['result'] = result 
 
             # Create two columns
             col1, col2 = st.columns(2)
