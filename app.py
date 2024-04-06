@@ -74,7 +74,7 @@ def page1():
     .title {
         text-align: center;
         color: #4f8bf9;
-        font-size: 36px;
+        font-size: 50px;
         padding-top: 20px;
         padding-bottom: 20px;
     }
@@ -118,17 +118,18 @@ def page1():
             col1, col2 = st.columns(2)
 
             with col1:
-                st.header("Mean Scores Plot")
+                st.markdown("## 📊 Mean Scores Plot", unsafe_allow_html=True)
                 mean_scores_plot = create_mean_scores_plot(result)
                 st.pyplot(mean_scores_plot) 
 
             with col2:
-                st.header("Mean Scores by Subject")
+                st.markdown("## 📚 Mean Scores by Subject", unsafe_allow_html=True)
                 mean_scores_table = create_mean_scores_table(result)
-                st.table(mean_scores_table)
+                st.dataframe(mean_scores_table.style.highlight_max(axis=0))
 
-            st.header("Result Table")
-            st.table(result)
+                st.markdown("## 📝 Result Table", unsafe_allow_html=True)
+                st.dataframe(result.style.background_gradient(cmap='viridis'))
+
             
             hide_sidebar()
 
