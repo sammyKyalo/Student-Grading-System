@@ -109,7 +109,7 @@ def page1():
             st.error("File must contain a 'NAMES' column.")
             return
         
-        st.markdown("<div class='result-container'>**Data has been successfully uploaded.**</div>", unsafe_allow_html=True)  
+        st.markdown("<div class='result-container'>Data has been successfully uploaded.</div>", unsafe_allow_html=True)  
 
         if st.button('Calculate Grades 📊', key='calculate_button'):
             result = calculate_grades(data)
