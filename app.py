@@ -70,27 +70,34 @@ def page1():
 
     st.markdown("""
     <style>
-    body {
-        color: #fff;
-        background-color: #4f8bf9;
+    .reportview-container .main .block-container {
+        max-width: 100%;
     }
-    h1 {
-        color: #ff6347;
+    .title {
+        text-align: center;
+        color: #4f8bf9;
+        font-size: 36px;
+        padding-top: 20px;
+        padding-bottom: 20px;
     }
-    h2 {
-        color: #8a2be2;
+    .upload-container {
+        margin-top: 30px;
+        margin-bottom: 30px;
     }
-    p {
-        color: #20b2aa;
+    .button-container {
+        margin-top: 30px;
     }
-    .stButton>button {
-        color: #fff;
-        background-color: #ff6347;
+    .result-container {
+        margin-top: 50px;
     }
     </style>
-        """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-    st.write("Please upload a CSV or Excel file with student grades:")
+    st.markdown("<div class='title'>Student Grading System</div>", unsafe_allow_html=True)
+
+    st.markdown("<hr style='border: 1px solid #4f8bf9;'>", unsafe_allow_html=True)
+
+    st.markdown("<div class='upload-container'>Please upload a CSV or Excel file with student grades:</div>", unsafe_allow_html=True)
 
     uploaded_file = st.file_uploader("Choose a file", type=['csv', 'xlsx'])
 
@@ -104,9 +111,9 @@ def page1():
             st.error("File must contain a 'NAMES' column.")
             return
         
-        st.markdown("**Data has been successfully uploaded.**")  
+        st.markdown("<div class='result-container'>**Data has been successfully uploaded.**</div>", unsafe_allow_html=True)  
 
-        if st.button('Calculate Grades'):
+        if st.button('Calculate Grades', key='calculate_button'):
             result = calculate_grades(data)
             st.session_state['result'] = result  
 
@@ -127,6 +134,8 @@ def page1():
             st.table(result)
             
             hide_sidebar()
+
+
 
 
 def page2():
