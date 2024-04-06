@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
+import time
 
 def calculate_grades(df):
     for col in df.columns[1:]:
@@ -53,18 +54,16 @@ def create_mean_scores_plot(df):
     return plt
 
 
-
-
-
-
-
 def search_and_filter(student_name, df):
     student_data = df.query("NAMES == @student_name")
     if not student_data.empty:
         st.write("Results for student:", student_name)
-        st.write(student_data[['NAMES', 'ENG', 'KISW', 'MATHS', 'INTEG SCINCE', 'SST/CRE', 'TOTAL MARKS']])
+        # Display all available subjects dynamically
+        subjects = [col for col in student_data.columns if col != 'NAMES' and col != 'TOTAL MARKS']
+        st.write(student_data[['NAMES'] + subjects + ['TOTAL MARKS']])
     else:
         st.write("Student not found.")
+
 
 def page1():
     st.title('Student Grading System')
@@ -113,6 +112,8 @@ def page1():
            
             st.header("Result Table")
             st.table(result)
+            
+            hide_sidebar()
 
 def page2():
     st.title('Student Performance Analysis')
@@ -129,6 +130,19 @@ def page2():
             search_results_placeholder.markdown("")  
     else:
         st.write("No data available. Please calculate grades on the first page.")
+
+def hide_sidebar():
+    if st.sidebar:
+        time.sleep(3) 
+        st.sidebar.empty() 
+
+st.set_page_config(layout="wide")
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 pages = {
     "Student Grade Calculator": page1,
