@@ -128,7 +128,7 @@ def page1():
                 mean_scores_table = create_mean_scores_table(result)
                 st.table(mean_scores_table)
 
-            st.header("Result Table")
+            st.markdown("## 📝 Result Table", unsafe_allow_html=True)
             st.table(result)
 
             
