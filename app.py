@@ -131,6 +131,47 @@ def page2():
     else:
         st.write("No data available. Please calculate grades on the first page.")
 
+def manual_page():
+    st.title('Application Manual')
+
+    st.markdown("""
+    # Student Grading System Application Manual
+
+    ## Overview
+    This application is designed to analyze student grades. It consists of two main pages: `Student Grade Calculator` and `Student Performance Analysis`.
+
+    ## Page 1: Student Grade Calculator
+
+    1. **Upload a File**: The application accepts CSV or Excel files containing student grades. The file must contain a column named 'NAMES'. To upload a file, click on the "Choose a file" button and select the desired file from your device.
+
+    2. **Calculate Grades**: After successfully uploading a file, click on the 'Calculate Grades' button. The application will calculate the total marks for each student and rank them accordingly.
+
+    3. **Mean Scores Plot**: This plot visualizes the mean scores of all subjects. It helps to understand the overall performance of the students in each subject.
+
+    4. **Mean Scores by Subject**: This table displays the mean scores of all subjects in descending order.
+
+    5. **Result Table**: This table displays the calculated total marks and ranks of all students.
+
+    ## Page 2: Student Performance Analysis
+
+    1. **Student Search and Filter**: You can select a student name from the dropdown menu and click on the 'Search' button. The application will display the selected student's scores in all subjects and their total marks.
+
+    Please note that the 'Student Performance Analysis' page requires data from the 'Student Grade Calculator' page. If no data is available, you will be prompted to calculate grades on the first page.
+
+    ## General Usage Notes
+
+    - The application uses a dark theme for better visibility. The text color is white and the background color is blue.
+
+    - The sidebar contains a radio button for navigating between the two pages.
+
+    - The application is designed to hide the sidebar and the Streamlit menu after a few seconds of inactivity.
+
+    - The application layout is set to 'wide' for better utilization of screen space.
+
+    This manual should help you navigate and use the application effectively.
+    """, unsafe_allow_html=True)
+
+
 def hide_sidebar():
     if st.sidebar:
         time.sleep(3) 
@@ -147,6 +188,7 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 pages = {
     "Student Grade Calculator": page1,
     "Student Performance Analysis": page2,
+    "Manual": manual_page,
 }
 
 selected_page = st.sidebar.radio("Select your page:", tuple(pages.keys()))
