@@ -1,6 +1,7 @@
-import base64
 import pandas as pd
 import streamlit as st
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 def calculate_grades(df):
     for col in df.columns[1:]:
@@ -27,6 +28,36 @@ def create_mean_scores_table(df):
     
     return mean_scores_df
 
+def create_mean_scores_plot(df):
+    df = df.iloc[:, 1:-1] 
+
+    mean_scores = df.mean()
+    sorted_scores = mean_scores.sort_values(ascending=False)
+
+    plt.figure(figsize=(10, 6), frameon=False)  # Set frameon to False
+    sns.set_theme(style="darkgrid")  
+    ax = sns.barplot(x=sorted_scores.index, y=sorted_scores.values, palette='viridis')
+    plt.xlabel('Subjects', color='white', bbox=dict(facecolor='black', edgecolor='black', boxstyle='round,pad=0.5'))
+    plt.ylabel('Mean Score', color='white', bbox=dict(facecolor='black', edgecolor='black', boxstyle='round,pad=0.5'))
+    plt.title('Mean Scores by Subject', color='white', bbox=dict(facecolor='black', edgecolor='black', boxstyle='round,pad=0.5'))
+    plt.xticks(rotation=90, color='white')
+    plt.yticks(color='white')
+    plt.tight_layout()
+
+    ax.set_facecolor('#000000')
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['top'].set_visible(False) 
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+
+    return plt
+
+
+
+
+
+
+
 def search_and_filter(student_name, df):
     student_data = df.query("NAMES == @student_name")
     if not student_data.empty:
@@ -36,7 +67,7 @@ def search_and_filter(student_name, df):
         st.write("Student not found.")
 
 def page1():
-    st.title('Student Grade Calculator')
+    st.title('Student Grading System')
 
     st.markdown("""
     <style>
@@ -67,17 +98,21 @@ def page1():
             result = calculate_grades(data)
             st.session_state['result'] = result  
 
-            
             col1, col2 = st.columns(2)
 
             with col1:
-                st.header("Ranking Table")
-                st.write(result) 
+                st.header("Mean Scores Plot")
+                mean_scores_plot = create_mean_scores_plot(result)
+                st.pyplot(mean_scores_plot) 
 
             with col2:
                 st.header("Mean Scores by Subject")
                 mean_scores_table = create_mean_scores_table(result)
-                st.write(mean_scores_table)
+                st.table(mean_scores_table)
+
+           
+            st.header("Result Table")
+            st.table(result)
 
 def page2():
     st.title('Student Performance Analysis')
@@ -94,7 +129,6 @@ def page2():
             search_results_placeholder.markdown("")  
     else:
         st.write("No data available. Please calculate grades on the first page.")
-
 
 pages = {
     "Student Grade Calculator": page1,
