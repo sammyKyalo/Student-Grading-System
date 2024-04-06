@@ -135,6 +135,23 @@ def manual_page():
     st.title('Application Manual')
 
     st.markdown("""
+    <style>
+    body {
+        background-color: #202020;
+    }
+    h1 {
+        color: #4f8bf9;
+    }
+    h2 {
+        color: #df691a;
+    }
+    p {
+        color: #f5f5f5;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
     # Student Grading System Application Manual
 
     ## Overview
@@ -162,7 +179,7 @@ def manual_page():
 
     - The application uses a dark theme for better visibility. The text color is white and the background color is blue.
 
-    - The sidebar contains a radio button for navigating between the two pages.
+    - The sidebar contains a radio button for navigating between the three pages.
 
     - The application is designed to hide the sidebar and the Streamlit menu after a few seconds of inactivity.
 
@@ -170,6 +187,7 @@ def manual_page():
 
     This manual should help you navigate and use the application effectively.
     """, unsafe_allow_html=True)
+
 
 
 def hide_sidebar():
