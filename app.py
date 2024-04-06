@@ -139,7 +139,6 @@ def page1():
 
 
 def page2():
-    st.title('Student Performance Analysis')
 
     if 'result' in st.session_state:
         result = st.session_state['result']
