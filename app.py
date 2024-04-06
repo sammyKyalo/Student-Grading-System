@@ -122,13 +122,14 @@ def page1():
                 mean_scores_plot = create_mean_scores_plot(result)
                 st.pyplot(mean_scores_plot) 
 
+           
             with col2:
                 st.markdown("## 📚 Mean Scores by Subject", unsafe_allow_html=True)
                 mean_scores_table = create_mean_scores_table(result)
-                st.dataframe(mean_scores_table.style.highlight_max(axis=0))
+                st.table(mean_scores_table)
 
-                st.markdown("## 📝 Result Table", unsafe_allow_html=True)
-                st.dataframe(result.style.background_gradient(cmap='viridis'))
+            st.header("Result Table")
+            st.table(result)
 
             
             hide_sidebar()
