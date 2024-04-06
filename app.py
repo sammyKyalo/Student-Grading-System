@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import time
 
+
 def calculate_grades(df):
     for col in df.columns[1:]:
         df[col] = pd.to_numeric(df[col], errors='coerce')
@@ -14,8 +15,8 @@ def calculate_grades(df):
 
     df = df.sort_values(by='TOTAL MARKS', ascending=False)
     df['Rank'] = range(1, len(df) + 1)
-    df.set_index('Rank', inplace=True)
-    df.reset_index(inplace=True)
+
+    df = df.set_index('Rank')  # Set the index and rename it to 'Rank'
 
     return df
 
