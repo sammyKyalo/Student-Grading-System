@@ -116,23 +116,25 @@ def page1():
 
         if st.button('Calculate Grades 📊', key='calculate_button'):
             result = calculate_grades(data)
-            st.session_state['result'] = result  
+            st.session_state['result'] = result 
 
             col1, col2 = st.columns(2)
 
             with col1:
                 st.markdown("## 📊 Mean Scores Plot", unsafe_allow_html=True)
                 mean_scores_plot = create_mean_scores_plot(result)
-                st.pyplot(mean_scores_plot) 
+                st.session_state['mean_scores_plot'] = mean_scores_plot
+                st.pyplot(st.session_state['mean_scores_plot']) 
 
-           
             with col2:
                 st.markdown("## 📚 Mean Scores by Subject", unsafe_allow_html=True)
                 mean_scores_table = create_mean_scores_table(result)
-                st.table(mean_scores_table)
+                st.session_state['mean_scores_table'] = mean_scores_table
+                st.table(st.session_state['mean_scores_table'])
 
             st.markdown("## 📝 Result Table", unsafe_allow_html=True)
             st.table(result)
+   
 
             
             hide_sidebar()
