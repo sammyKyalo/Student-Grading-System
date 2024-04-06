@@ -16,7 +16,7 @@ def calculate_grades(df):
     df = df.sort_values(by='TOTAL MARKS', ascending=False)
     df['Rank'] = range(1, len(df) + 1)
 
-    df = df.set_index('Rank')  # Set the index and rename it to 'Rank'
+    df = df.set_index('Rank')  
 
     return df
 
@@ -233,3 +233,4 @@ pages = {
 selected_page = st.sidebar.radio("Select your page:", tuple(pages.keys()))
 
 pages[selected_page]()
+
