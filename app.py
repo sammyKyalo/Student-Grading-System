@@ -11,7 +11,7 @@ def calculate_grades(df):
 
     subjects = df.columns.tolist()[1:]
 
-    df['TOTAL MARKS'] = df[subjects].sum(axis=1)
+    df['TOTAL MARKS'] = df[subjects].sum(axis=1).round(2)
 
     df = df.sort_values(by='TOTAL MARKS', ascending=False)
     df['Rank'] = range(1, len(df) + 1)
@@ -25,7 +25,7 @@ def calculate_grades(df):
 def create_mean_scores_table(df):
     df = df.iloc[:, 1:-1] 
 
-    mean_scores = df.mean()
+    mean_scores = df.mean().round(2)
     sorted_scores = mean_scores.sort_values(ascending=False)
 
     mean_scores_df = pd.DataFrame({"Subject": sorted_scores.index, "Mean Score": sorted_scores.values})
