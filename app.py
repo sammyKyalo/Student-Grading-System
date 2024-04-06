@@ -66,7 +66,7 @@ def search_and_filter(student_name, df):
 
 
 def page1():
-    st.title('Student Grading System')
+    st.title('🎓 Student Grading System')
 
     st.markdown("""
     <style>
@@ -93,7 +93,7 @@ def page1():
     </style>
     """, unsafe_allow_html=True)
 
-    st.markdown("<div class='title'>Student Grading System</div>", unsafe_allow_html=True)
+    st.markdown("<div class='title'>🎓 Student Grading System</div>", unsafe_allow_html=True)
 
     st.markdown("<hr style='border: 1px solid #4f8bf9;'>", unsafe_allow_html=True)
 
@@ -113,7 +113,7 @@ def page1():
         
         st.markdown("<div class='result-container'>**Data has been successfully uploaded.**</div>", unsafe_allow_html=True)  
 
-        if st.button('Calculate Grades', key='calculate_button'):
+        if st.button('Calculate Grades 📊', key='calculate_button'):
             result = calculate_grades(data)
             st.session_state['result'] = result  
 
@@ -129,23 +129,19 @@ def page1():
                 mean_scores_table = create_mean_scores_table(result)
                 st.table(mean_scores_table)
 
-           
             st.header("Result Table")
             st.table(result)
             
             hide_sidebar()
-
-
-
 
 def page2():
 
     if 'result' in st.session_state:
         result = st.session_state['result']
 
-        st.header("Student Search and Filter:")
+        st.header("🔍 Student Search and Filter:")
         selected_student = st.selectbox("Select student name:", result['NAMES'].unique())
-        search_button = st.button("Search")
+        search_button = st.button("Search 🔍")
         if search_button:
             search_results_placeholder = st.empty()
             search_and_filter(selected_student, result)  
@@ -154,7 +150,7 @@ def page2():
         st.write("No data available. Please calculate grades on the first page.")
 
 def manual_page():
-    st.title('Application Manual')
+    st.title('📖 Application Manual')
 
     st.markdown("""
     <style>
@@ -174,7 +170,7 @@ def manual_page():
     """, unsafe_allow_html=True)
 
     st.markdown("""
-    # Student Grading System Application Manual
+    # 📖 Student Grading System Application Manual
 
     ## Overview
     This application is designed to analyze student grades. It consists of two main pages: `Student Grade Calculator` and `Student Performance Analysis`.
@@ -209,7 +205,6 @@ def manual_page():
 
     This manual should help you navigate and use the application effectively.
     """, unsafe_allow_html=True)
-
 
 
 def hide_sidebar():
