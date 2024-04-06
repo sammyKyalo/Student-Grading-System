@@ -14,12 +14,11 @@ def calculate_grades(df):
 
     df = df.sort_values(by='TOTAL MARKS', ascending=False)
     df['Rank'] = range(1, len(df) + 1)
-
-    df['Rank_copy'] = df['Rank']
-
     df.set_index('Rank', inplace=True)
+    df.reset_index(inplace=True)
 
     return df
+
 
 
 def create_mean_scores_table(df):
