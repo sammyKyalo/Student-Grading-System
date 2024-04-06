@@ -74,6 +74,19 @@ def page1():
         color: #fff;
         background-color: #4f8bf9;
     }
+    h1 {
+        color: #ff6347;
+    }
+    h2 {
+        color: #8a2be2;
+    }
+    p {
+        color: #20b2aa;
+    }
+    .stButton>button {
+        color: #fff;
+        background-color: #ff6347;
+    }
     </style>
         """, unsafe_allow_html=True)
 
@@ -114,6 +127,7 @@ def page1():
             st.table(result)
             
             hide_sidebar()
+
 
 def page2():
     st.title('Student Performance Analysis')
