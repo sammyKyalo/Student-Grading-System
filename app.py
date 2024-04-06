@@ -66,8 +66,6 @@ def search_and_filter(student_name, df):
 
 
 def page1():
-    st.title('🎓 Student Grading System')
-
     st.markdown("""
     <style>
     .reportview-container .main .block-container {
@@ -133,6 +131,7 @@ def page1():
             st.table(result)
             
             hide_sidebar()
+
 
 def page2():
 
