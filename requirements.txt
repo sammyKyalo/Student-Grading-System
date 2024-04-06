@@ -2,5 +2,5 @@ streamlit
 pandas
 reportlab
 openpyxl
-maplotlib
+maplotlib.pyplot
 seaborn
