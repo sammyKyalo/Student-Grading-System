@@ -3,6 +3,8 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 import time
+from conn import get_connection, save_result_to_sql, create_table_if_not_exists
+
 
 st.set_page_config(layout="wide")
 
@@ -112,11 +114,12 @@ def page1():
     st.markdown("<div class='title'>🎓 Student Grading System</div>", unsafe_allow_html=True)
 
     st.markdown("<hr style='border: 1px solid #4f8bf9;'>", unsafe_allow_html=True)
-    cols = st.columns(4)
-    teacher_name = cols[0].text_input("Teacher's Name")
-    Grade = cols[1].text_input("Grade")
-    term = cols[2].selectbox("Term", options=['Select a term', 1, 2, 3])
-    exam_type = cols[3].selectbox("Exam Type", options=['Select an exam type', 'Opening School', 'Midterm', 'End Term'])
+    cols = st.columns(5)
+    School = cols[0].text_input("School Name")
+    teacher_name = cols[1].text_input("Teacher's Name")
+    Grade = cols[2].text_input("Grade")
+    term = cols[3].selectbox("Term", options=['Select a term', 1, 2, 3])
+    exam_type = cols[4].selectbox("Exam Type", options=['Select an exam type', 'Opening School', 'Midterm', 'End Term'])
 
     st.markdown("<div class='upload-container'>Please upload a CSV or Excel file with student grades:</div>", unsafe_allow_html=True)
 
@@ -128,6 +131,9 @@ def page1():
         except Exception as e:
             data = pd.read_excel(uploaded_file)
         
+        if not isinstance(data, pd.DataFrame):
+            data = pd.DataFrame(data)
+            
         if 'NAMES' not in data.columns:
             st.error("File must contain a 'NAMES' column.")
             return
@@ -135,7 +141,7 @@ def page1():
         st.markdown("<div class='result-container'>Data has been successfully uploaded.</div>", unsafe_allow_html=True)  
 
         if st.button('Calculate Grades 📊', key='calculate_button'):
-            if not teacher_name or not Grade or term == 'Select a term' or exam_type == 'Select an exam type':
+            if not School or not teacher_name or not Grade or term == 'Select a term' or exam_type == 'Select an exam type':
                st.error("Please provide all the information.")
                return
         
@@ -150,19 +156,28 @@ def page1():
                 st.session_state['mean_scores_plot'] = mean_scores_plot
                 st.pyplot(st.session_state['mean_scores_plot']) 
 
+            
             with col2:
                 st.markdown("## 📚 Mean Scores by Subject", unsafe_allow_html=True)
                 mean_scores_table = create_mean_scores_table(result)
                 st.session_state['mean_scores_table'] = mean_scores_table
                 st.table(st.session_state['mean_scores_table'])
             
+            
             row1, row2 = st.columns(2)
+            row1.markdown(f"**School:** {School}")
             row1.markdown(f"**Teacher's Name:** {teacher_name}")
             row1.markdown(f"**Grade:** {Grade}")
             row2.markdown(f"**Term:** {term}")
             row2.markdown(f"**Exam Type:** {exam_type}")
             st.markdown("## 📝 Result Table", unsafe_allow_html=True)
             st.table(result)
+
+            if st.session_state.get('result') is not None and School and Grade and term and exam_type:
+                connection = get_connection()
+                if connection:
+                    save_result_to_sql(result, School, Grade, term, exam_type)
+                    create_table_if_not_exists(connection, result, School, Grade, term, exam_type)
 
 
 def page2():
@@ -243,8 +258,6 @@ def page2():
                 st.write("Student not found.")
     else:
         st.write("No data available. Please calculate grades on the first page.")
-
-
 
 
 
@@ -330,3 +343,6 @@ pages = {
 selected_page = st.sidebar.radio("Select your page:", tuple(pages.keys()))
 
 pages[selected_page]()
+
+
+
