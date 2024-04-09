@@ -5,6 +5,17 @@ import seaborn as sns
 import time
 
 st.set_page_config(layout="wide")
+st.set_page_config(layout="wide")
+
+st.markdown("""
+    <style>
+    .reportview-container {
+        background: #202020;
+        color: #fff;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 @st.cache_data
 def calculate_grades(df):
     for col in df.columns[1:]:
