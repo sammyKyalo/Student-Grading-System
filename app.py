@@ -5,7 +5,6 @@ import seaborn as sns
 import time
 
 st.set_page_config(layout="wide")
-st.set_page_config(layout="wide")
 
 st.markdown("""
     <style>
