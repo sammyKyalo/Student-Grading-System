@@ -104,7 +104,7 @@ def page1():
     st.markdown("<hr style='border: 1px solid #4f8bf9;'>", unsafe_allow_html=True)
     cols = st.columns(4)
     teacher_name = cols[0].text_input("Teacher's Name")
-    class_name = cols[1].text_input("Class Name")
+    class_name = cols[1].text_input("Class")
     term = cols[2].selectbox("Term", options=[1, 2, 3])
     exam_type = cols[3].selectbox("Exam Type", options=['Opening School', 'Midterm', 'End Term'])
 
@@ -125,9 +125,13 @@ def page1():
         st.markdown("<div class='result-container'>Data has been successfully uploaded.</div>", unsafe_allow_html=True)  
 
         if st.button('Calculate Grades 📊', key='calculate_button'):
+            if not teacher_name or not class_name or not term or not exam_type:
+                st.error("Please provide all the information.")
+                return
+        
             result = calculate_grades(data)
             st.session_state['result'] = result 
-
+       
             col1, col2 = st.columns(2)
 
             with col1:
