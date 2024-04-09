@@ -275,16 +275,18 @@ def manual_page():
     This application is designed to analyze student grades. It consists of two main pages: `Student Grade Calculator` and `Student Performance Analysis`.
 
     ## Page 1: Student Grade Calculator
+    
+    1. **Personal Information**: The teacher is required to provide his/her name, the class he/she teaches, Term, and exam type.
 
-    1. **Upload a File**: The application accepts CSV or Excel files containing student grades. The file must contain a column named 'NAMES'. To upload a file, click on the "Choose a file" button and select the desired file from your device.
+    2. **Upload a File**: The application accepts CSV or Excel files containing student grades. The file must contain a column named 'NAMES'. To upload a file, click on the "Choose a file" button and select the desired file from your device.
 
-    2. **Calculate Grades**: After successfully uploading a file, click on the 'Calculate Grades' button. The application will calculate the total marks for each student and rank them accordingly.
+    3. **Calculate Grades**: After successfully uploading a file, click on the 'Calculate Grades' button. The application will calculate the total marks for each student and rank them accordingly.
 
-    3. **Mean Scores Plot**: This plot visualizes the mean scores of all subjects. It helps to understand the overall performance of the students in each subject.
+    4. **Mean Scores Plot**: This plot visualizes the mean scores of all subjects. It helps to understand the overall performance of the students in each subject.
 
-    4. **Mean Scores by Subject**: This table displays the mean scores of all subjects in descending order.
+    5. **Mean Scores by Subject**: This table displays the mean scores of all subjects in descending order.
 
-    5. **Result Table**: This table displays the calculated total marks and ranks of all students.
+    6. **Result Table**: This table displays the calculated total marks and ranks of all students.
 
     ## Page 2: Student Performance Analysis
 
