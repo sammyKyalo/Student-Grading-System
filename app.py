@@ -114,7 +114,7 @@ def page1():
     st.markdown("<hr style='border: 1px solid #4f8bf9;'>", unsafe_allow_html=True)
     cols = st.columns(4)
     teacher_name = cols[0].text_input("Teacher's Name")
-    Grade = cols[1].text_input("Class")
+    Grade = cols[1].text_input("Grade")
     term = cols[2].selectbox("Term", options=['Select a term', 1, 2, 3])
     exam_type = cols[3].selectbox("Exam Type", options=['Select an exam type', 'Opening School', 'Midterm', 'End Term'])
 
