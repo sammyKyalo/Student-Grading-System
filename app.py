@@ -115,8 +115,8 @@ def page1():
     cols = st.columns(4)
     teacher_name = cols[0].text_input("Teacher's Name")
     class_name = cols[1].text_input("Class")
-    term = cols[2].selectbox("Term", options=[1, 2, 3])
-    exam_type = cols[3].selectbox("Exam Type", options=['Opening School', 'Midterm', 'End Term'])
+    term = cols[2].selectbox("Term", options=['Select a term', 1, 2, 3])
+    exam_type = cols[3].selectbox("Exam Type", options=['Select an exam type', 'Opening School', 'Midterm', 'End Term'])
 
     st.markdown("<div class='upload-container'>Please upload a CSV or Excel file with student grades:</div>", unsafe_allow_html=True)
 
