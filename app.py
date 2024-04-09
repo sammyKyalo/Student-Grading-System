@@ -135,9 +135,9 @@ def page1():
         st.markdown("<div class='result-container'>Data has been successfully uploaded.</div>", unsafe_allow_html=True)  
 
         if st.button('Calculate Grades 📊', key='calculate_button'):
-            if not teacher_name or not Grade or not term or not exam_type:
-                st.error("Please provide all the information.")
-                return
+            if not teacher_name or not Grade or term == 'Choose a term' or exam_type == 'Please choose an exam type':
+               st.error("Please provide all the information.")
+               return
         
             result = calculate_grades(data)
             st.session_state['result'] = result 
