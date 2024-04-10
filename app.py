@@ -117,7 +117,7 @@ def page1():
     cols = st.columns(5)
     School = cols[0].text_input("School Name")
     teacher_name = cols[1].text_input("Teacher's Name")
-    Grade = cols[2].text_input("Grade")
+    Grade = cols[2].selectbox("Grade", options=['Select a Grade','PP1','PP2','Grade 1', 'Grade 2','Grade 3', 'Grade 4','Grade 5','Grade 6'])
     term = cols[3].selectbox("Term", options=['Select a term', 1, 2, 3])
     exam_type = cols[4].selectbox("Exam Type", options=['Select an exam type', 'Opening School', 'Midterm', 'End Term'])
 
