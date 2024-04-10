@@ -32,7 +32,7 @@ def save_result_to_sql(result, School, Grade, term, exam_type):
     connection = get_connection()
     if connection is not None:
         try:
-            password = quote_plus("Babygal@$")  # Quote the password to handle special characters
+            password = quote_plus("Babygal@$")
             engine = create_engine(f'mysql+mysqlconnector://root:{password}@localhost:3306/results')
             table_name = f"{School}_{Grade}_{term}_{exam_type}".replace(" ", "_")
             create_table_if_not_exists(connection, result, School, Grade, term, exam_type)
