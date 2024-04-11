@@ -345,4 +345,3 @@ selected_page = st.sidebar.radio("Select your page:", tuple(pages.keys()))
 pages[selected_page]()
 
 
-

@@ -4,7 +4,6 @@ reportlab
 openpyxl
 matplotlib
 seaborn
-mysql.connector
-sqlalchemy
-pymysql
+sqlite3
 logging
+sqlalchemy
