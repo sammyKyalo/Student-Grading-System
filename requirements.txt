@@ -1,4 +1,4 @@
-streamlit
+streamlit==1.33.0
 pandas
 reportlab
 openpyxl
@@ -6,3 +6,5 @@ matplotlib
 seaborn
 mysql.connector
 sqlalchemy
+mysqlclient
+logging
