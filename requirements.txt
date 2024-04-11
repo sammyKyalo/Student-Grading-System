@@ -4,6 +4,5 @@ reportlab
 openpyxl
 matplotlib
 seaborn
-sqlite
 logging
 sqlalchemy
