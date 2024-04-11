@@ -6,5 +6,5 @@ matplotlib
 seaborn
 mysql.connector
 sqlalchemy
-mysqlclient
+pymysql
 logging
