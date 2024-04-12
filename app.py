@@ -177,7 +177,7 @@ def page1():
                 connection = get_connection()
                 if connection:
                     save_result_to_sql(result, School, Grade, term, exam_type)
-                    create_table_if_not_exists(connection, result, School, Grade, term, exam_type)
+                    
 
 
 def page2():
