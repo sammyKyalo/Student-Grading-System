@@ -2,7 +2,6 @@ import logging
 import sqlite3
 from sqlite3 import Error
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
