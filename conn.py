@@ -15,11 +15,9 @@ def get_connection():
         logger.error("Error while connecting to SQLite: %s", e)
         return None
 
-def create_table_if_not_exists(connection, result, School, Grade, term, exam_type):
+def create_table_if_not_exists(connection, table_name, columns):
     if connection:
         cursor = connection.cursor()
-        table_name = f"{School}_{Grade}_{term}_{exam_type}".replace(" ", "_").lower()
-        columns = ', '.join([f'`{column}` TEXT' for column in result.columns])
         create_table_query = f"CREATE TABLE IF NOT EXISTS `{table_name}` ({columns})"
         try:
             cursor.execute(create_table_query)
@@ -32,12 +30,12 @@ def save_result_to_sql(result, School, Grade, term, exam_type):
     connection = get_connection()
     if connection is not None:
         try:
-            table_name = f"{School}_{Grade}_{term}_{exam_type}".replace(" ", "_")
-            create_table_if_not_exists(connection, result, School, Grade, term, exam_type)
+            table_name = f"{School}_{Grade}_{term}_{exam_type}".replace(" ", "_").lower()
+            columns = ', '.join([f'`{column}` TEXT' for column in result.columns])
+            create_table_if_not_exists(connection, table_name, columns)
             cursor = connection.cursor()
-            columns = ', '.join(result.columns)
             placeholders = ', '.join(['?' for _ in result.columns])
-            insert_query = f"INSERT INTO `{table_name}` ({columns}) VALUES ({placeholders})"
+            insert_query = f"INSERT INTO `{table_name}` VALUES ({placeholders})"
             data = [tuple(row) for row in result.values]
             cursor.executemany(insert_query, data)
             connection.commit()
@@ -50,15 +48,14 @@ def save_result_to_sql(result, School, Grade, term, exam_type):
     else:
         logger.error("Failed to save data to SQLite. No connection to SQLite database.")
 
-
 def insert_data_into_table(connection, table_name, data):
     if connection:
         cursor = connection.cursor()
         placeholders = ', '.join(['?'] * len(data.columns))
         columns = ', '.join(data.columns)
-        sql = f"INSERT INTO `{table_name}` ({columns}) VALUES ({placeholders})"
+        insert_query = f"INSERT INTO `{table_name}` ({columns}) VALUES ({placeholders})"
         try:
-            cursor.executemany(sql, data.values.tolist())
+            cursor.executemany(insert_query, data.values.tolist())
             connection.commit()
             logger.info("Data inserted into table %s successfully", table_name)
         except Error as e:
