@@ -2,7 +2,6 @@ import logging
 import sqlite3
 from sqlite3 import Error
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -31,7 +30,7 @@ def save_result_to_sql(result, School, Grade, term, exam_type):
     if connection is not None:
         try:
             table_name = f"{School}_{Grade}_{term}_{exam_type}".replace(" ", "_").lower()
-            # Determine the data type for each column
+            result.columns = ["".join(e for e in col if e.isalnum() or e=='_') for col in result.columns]
             column_types = []
             for column in result.columns:
                 if result[column].dtype == 'int64':
@@ -56,4 +55,3 @@ def save_result_to_sql(result, School, Grade, term, exam_type):
             logger.info("Connection closed")
     else:
         logger.error("Failed to save data to SQLite. No connection to SQLite database.")
-
