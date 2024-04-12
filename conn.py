@@ -34,7 +34,13 @@ def save_result_to_sql(result, School, Grade, term, exam_type):
         try:
             table_name = f"{School}_{Grade}_{term}_{exam_type}".replace(" ", "_")
             create_table_if_not_exists(connection, result, School, Grade, term, exam_type)
-            result.to_sql(table_name, con=connection, if_exists='append', index=False)
+            cursor = connection.cursor()
+            columns = ', '.join(result.columns)
+            placeholders = ', '.join(['?' for _ in result.columns])
+            insert_query = f"INSERT INTO `{table_name}` ({columns}) VALUES ({placeholders})"
+            data = [tuple(row) for row in result.values]
+            cursor.executemany(insert_query, data)
+            connection.commit()
             logger.info("Data saved to table %s", table_name)
         except Exception as e:
             logger.error("Error while saving data to SQLite: %s", e)
@@ -43,6 +49,7 @@ def save_result_to_sql(result, School, Grade, term, exam_type):
             logger.info("Connection closed")
     else:
         logger.error("Failed to save data to SQLite. No connection to SQLite database.")
+
 
 def insert_data_into_table(connection, table_name, data):
     if connection:
