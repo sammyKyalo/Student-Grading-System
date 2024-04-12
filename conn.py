@@ -31,7 +31,16 @@ def save_result_to_sql(result, School, Grade, term, exam_type):
     if connection is not None:
         try:
             table_name = f"{School}_{Grade}_{term}_{exam_type}".replace(" ", "_").lower()
-            columns = ', '.join([f'`{column}` TEXT' for column in result.columns])
+            # Determine the data type for each column
+            column_types = []
+            for column in result.columns:
+                if result[column].dtype == 'int64':
+                    column_types.append(f'`{column}` INTEGER')
+                elif result[column].dtype == 'float64':
+                    column_types.append(f'`{column}` REAL')
+                else:
+                    column_types.append(f'`{column}` TEXT')
+            columns = ', '.join(column_types)
             create_table_if_not_exists(connection, table_name, columns)
             cursor = connection.cursor()
             placeholders = ', '.join(['?' for _ in result.columns])
@@ -48,15 +57,3 @@ def save_result_to_sql(result, School, Grade, term, exam_type):
     else:
         logger.error("Failed to save data to SQLite. No connection to SQLite database.")
 
-def insert_data_into_table(connection, table_name, data):
-    if connection:
-        cursor = connection.cursor()
-        placeholders = ', '.join(['?'] * len(data.columns))
-        columns = ', '.join(data.columns)
-        insert_query = f"INSERT INTO `{table_name}` ({columns}) VALUES ({placeholders})"
-        try:
-            cursor.executemany(insert_query, data.values.tolist())
-            connection.commit()
-            logger.info("Data inserted into table %s successfully", table_name)
-        except Error as e:
-            logger.error("Error while inserting data into table: %s", e)
