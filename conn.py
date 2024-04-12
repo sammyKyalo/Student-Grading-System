@@ -2,6 +2,7 @@ import logging
 import sqlite3
 from sqlite3 import Error
 
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,7 @@ def save_result_to_sql(result, School, Grade, term, exam_type):
             create_table_if_not_exists(connection, table_name, columns)
             cursor = connection.cursor()
             placeholders = ', '.join(['?' for _ in result.columns])
-            insert_query = f"INSERT INTO `{table_name}` VALUES ({placeholders})"
+            insert_query = f"INSERT INTO `{table_name}` ({', '.join(result.columns)}) VALUES ({placeholders})"
             data = [tuple(row) for row in result.values]
             cursor.executemany(insert_query, data)
             connection.commit()
