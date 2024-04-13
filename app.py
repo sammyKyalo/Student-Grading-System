@@ -346,26 +346,14 @@ hide_streamlit_style = """
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
-import logging
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
+
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SPREADSHEET_ID = '1dSlooUVS_hgm1C1xUyZ90kcYL7ZdMq0d-nKWrbz30Ls'
-
-CLIENT_CONFIG = {
-    "installed": {
-        "client_id": "924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com",
-        "project_id": "grading-system-project",
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_secret": "GOCSPX-5DI1xMrVnZ1FvOGVms7Uv2opSxJ"
-    }
-}
 
 def get_google_sheet(credentials):
     try:
@@ -374,7 +362,7 @@ def get_google_sheet(credentials):
         logger.info("Connected to Google Sheet")
         return sheet
     except Exception as e:
-        logger.error("Error while connecting to Google Sheet: %s", e)
+        logger.exception("Error while connecting to Google Sheet")
         return None
 
 def save_result_to_google_sheet(result, School, Grade, term, exam_type, credentials):
@@ -382,6 +370,7 @@ def save_result_to_google_sheet(result, School, Grade, term, exam_type, credenti
     if sheet:
         try:
             table_name = f"{School}_{Grade}_{term}_{exam_type}".replace(" ", "_").lower()
+            logger.info(f"Table name: {table_name}")
             header = result.columns.tolist()
             data = [header] + result.values.tolist()
             service = build("sheets", "v4", credentials=credentials)
@@ -389,7 +378,7 @@ def save_result_to_google_sheet(result, School, Grade, term, exam_type, credenti
             service.spreadsheets().values().update(spreadsheetId=SPREADSHEET_ID, range=table_name, valueInputOption="USER_ENTERED", body={"values": data}).execute()
             logger.info("Data saved to Google Sheet")
         except Exception as e:
-            logger.error("Error while saving data to Google Sheet: %s", e)
+            logger.exception("Error while saving data to Google Sheet")
     else:
         logger.error("Failed to save data to Google Sheet. Connection failed.")
 
@@ -398,8 +387,10 @@ def main(result, School, Grade, term, exam_type):
         credentials = Credentials.from_service_account_file('C:\\Users\\ELITEBOOK\\Desktop\\Everything python\\Student Grading System\\client_secret_924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com.json', scopes=SCOPES)
         save_result_to_google_sheet(result, School, Grade, term, exam_type, credentials)
     except Exception as e:
-        logger.error("Error during main execution: %s", e)
+        logger.exception("Error during main execution")
 
+
+main(pd.DataFrame(), 'School', 'Grade', 'term', 'exam_type')
 
 
 
