@@ -388,8 +388,7 @@ def save_result_to_google_sheet(result, School, Grade, term, exam_type, credenti
 
 def main(result, School, Grade, term, exam_type):
     try:
-        service_account_info = json.loads('{"web":{"client_id":"924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com","project_id":"grading-system-project","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"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"}}')
-        credentials = service_account.Credentials.from_service_account_info(service_account_info['web'], scopes=SCOPES)
+        credentials = Credentials.from_service_account_file('{"web":{"client_id":"924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com","project_id":"grading-system-project","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"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"}}.json', scopes=SCOPES)
         save_result_to_google_sheet(result, School, Grade, term, exam_type, credentials)
     except Exception as e:
         logger.exception("Error during main execution")
