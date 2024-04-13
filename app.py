@@ -3,8 +3,45 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 import time
+import logging
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+CREDENTIALS_FILE = 'client_secret_924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com.json'
+SHEET_NAME = 'results'
 
 
+def get_google_sheet():
+    try:
+        scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, scope)
+        gc = gspread.authorize(credentials)
+        sheet = gc.open(SHEET_NAME).sheet1 
+        logger.info("Connected to Google Sheet")
+        return sheet
+    except Exception as e:
+        logger.error("Error while connecting to Google Sheet: %s", e)
+        return None
+
+
+def save_result_to_google_sheet(result, School, Grade, term, exam_type):
+    sheet = get_google_sheet()
+    if sheet:
+        try:
+            table_name = f"{School}_{Grade}_{term}_{exam_type}".replace(" ", "_").lower()
+            header = result.columns.tolist()
+            data = [header] + result.values.tolist()
+            sheet.clear()
+            sheet.append_row(header)
+            sheet.append_rows(data[1:])
+            logger.info("Data saved to Google Sheet")
+        except Exception as e:
+            logger.error("Error while saving data to Google Sheet: %s", e)
+    else:
+        logger.error("Failed to save data to Google Sheet. Connection failed.")
 
 
 
@@ -175,15 +212,11 @@ def page1():
             st.markdown("## 📝 Result Table", unsafe_allow_html=True)
             st.table(result)
 
-            if st.session_state.get('result') is not None and School and Grade and term and exam_type:
-                result = st.session_state['result']
+            if School and Grade and term and exam_type:
+                save_result_to_google_sheet(result, School, Grade, term, exam_type)
 
-                table_name = f"{School}_{Grade}_{term}_{exam_type}".replace(" ", "_").lower()
-            
-                save_result_to_google_sheet(result, table_name)
 
                                 
-
 
 def page2():
     st.markdown("""
@@ -339,6 +372,8 @@ hide_streamlit_style = """
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
+
+
 pages = {
     "Student Grade Calculator": page1,
     "Student Performance Analysis": page2,
@@ -348,42 +383,3 @@ pages = {
 selected_page = st.sidebar.radio("Select your page:", tuple(pages.keys()))
 
 pages[selected_page]()
-
-
-import logging
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-CREDENTIALS_FILE = 'client_secret_924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com.json'
-SHEET_NAME = 'results'
-
-def get_google_sheet():
-    try:
-        scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, scope)
-        gc = gspread.authorize(credentials)
-        sheet = gc.open(SHEET_NAME).sheet1 
-        logger.info("Connected to Google Sheet")
-        return sheet
-    except Exception as e:
-        logger.error("Error while connecting to Google Sheet: %s", e)
-        return None
-
-def save_result_to_google_sheet(result, School, Grade, term, exam_type):
-    sheet = get_google_sheet()
-    if sheet:
-        try:
-            table_name = f"{School}_{Grade}_{term}_{exam_type}".replace(" ", "_").lower()
-            header = result.columns.tolist()
-            data = [header] + result.values.tolist()
-            sheet.clear()
-            sheet.append_row(header)
-            sheet.append_rows(data[1:])
-            logger.info("Data saved to Google Sheet")
-        except Exception as e:
-            logger.error("Error while saving data to Google Sheet: %s", e)
-    else:
-        logger.error("Failed to save data to Google Sheet. Connection failed.")
