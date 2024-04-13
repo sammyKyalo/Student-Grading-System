@@ -15,6 +15,7 @@ from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2.credentials import Credentials
 from google.oauth2.service_account import Credentials
+from google.oauth2 import service_account
 
 st.set_page_config(layout="wide")
 
@@ -384,7 +385,7 @@ def save_result_to_google_sheet(result, School, Grade, term, exam_type, credenti
 
 def main(result, School, Grade, term, exam_type):
     try:
-        credentials = Credentials.from_service_account_file('C:\\Users\\ELITEBOOK\\Desktop\\Everything python\\Student Grading System\\client_secret_924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com.json', scopes=SCOPES)
+        credentials = Credentials.from_service_account_file(st.secrets["google_service_account"], scopes=SCOPES)
         save_result_to_google_sheet(result, School, Grade, term, exam_type, credentials)
     except Exception as e:
         logger.exception("Error during main execution")
