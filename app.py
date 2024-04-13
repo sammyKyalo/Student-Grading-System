@@ -359,12 +359,22 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import logging
+import toml
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SPREADSHEET_ID = '1dSlooUVS_hgm1C1xUyZ90kcYL7ZdMq0d-nKWrbz30Ls'
+
+
+def load_secrets():
+    try:
+        with open("secrets.toml", "r") as file:
+            return toml.load(file)
+    except FileNotFoundError:
+        logger.error("secrets.toml file not found.")
+        return None
 
 
 def get_google_sheet(credentials):
@@ -398,19 +408,14 @@ def save_result_to_google_sheet(result, School, Grade, term, exam_type, credenti
 
 def main(result, School, teacher_name, Grade, term, exam_type):
     try:
-        creds = None
-        if os.path.exists("token.json"):
-            creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    r'C:\Users\ELITEBOOK\Desktop\Everything python\Student Grading System\credentials.json', SCOPES
-                )
-                creds = flow.run_local_server(port=0)
-            with open("token.json", "w") as token:
-                token.write(creds.to_json())
+        secrets = load_secrets()
+        if secrets is None:
+            return
+        
+        creds = Credentials.from_client_config(
+            secrets['web'],
+            scopes=SCOPES
+        )
         
         if result is not None:
             save_result_to_google_sheet(result, School, Grade, term, exam_type, creds)
@@ -422,6 +427,11 @@ def main(result, School, teacher_name, Grade, term, exam_type):
             
     except Exception as e:
         logger.exception("Error during main execution")
+
+
+if __name__ == "__main__":
+    main()
+
 
 
 
