@@ -412,7 +412,7 @@ def main(result, School, teacher_name, Grade, term, exam_type):
     try:
         creds = None
         if os.path.exists("token.json"):
-            creds = google.oauth2.credentials.Credentials.from_authorized_user_file("token.json", SCOPES)
+            creds = google.oauth2.credentials.Credentials.from_authorized_user_info(secrets_data, SCOPES)
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
