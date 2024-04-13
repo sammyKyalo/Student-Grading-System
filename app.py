@@ -390,16 +390,13 @@ def save_result_to_google_sheet(result, School, Grade, term, exam_type, credenti
     else:
         logger.error("Failed to save data to Google Sheet. Connection failed.")
 
-def main():
+def main(result, School, Grade, term, exam_type):
     try:
-        # Load the service account credentials from the key file
         credentials = Credentials.from_service_account_file('C:\\Users\\ELITEBOOK\\Desktop\\Everything python\\Student Grading System\\client_secret_924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com.json', scopes=SCOPES)
         save_result_to_google_sheet(result, School, Grade, term, exam_type, credentials)
     except Exception as e:
         logger.error("Error during main execution: %s", e)
 
-if __name__ == "__main__":
-    main()
 
 
 
