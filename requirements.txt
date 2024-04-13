@@ -1,11 +1,9 @@
 streamlit==1.33.0
 pandas
-reportlab
-openpyxl
 matplotlib
 seaborn
-logging
 gspread
 oauth2client
 google-auth
-google-api-python-client
+google-auth-oauthlib
+google-auth-httplib2
