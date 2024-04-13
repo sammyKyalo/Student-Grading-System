@@ -3,7 +3,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 import time
-from conn import save_result_to_google_sheet, get_connection, save_result_to_sql, create_table_if_not_exists
+from conn import save_result_to_google_sheet
 
 
 
