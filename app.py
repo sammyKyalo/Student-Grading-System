@@ -417,7 +417,8 @@ def main(result, School, teacher_name, Grade, term, exam_type):
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                secrets_data = secrets.load()
+                with open("secrets.toml", "r") as f:
+                    secrets_data = toml.load(f)
                 refresh_token = secrets_data['web']['refresh_token']
                 creds = google.oauth2.credentials.Credentials(
                     token=None,
