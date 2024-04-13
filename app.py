@@ -417,16 +417,20 @@ def main(result, School, teacher_name, Grade, term, exam_type):
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                with open("secrets.toml", "r") as f:
-                    secrets_data = toml.load(f)
-                refresh_token = secrets_data['web']['refresh_token']
-                creds = google.oauth2.credentials.Credentials(
-                    token=None,
-                    refresh_token=refresh_token,
-                    client_id=secrets_data['web']['client_id'],
-                    client_secret=secrets_data['web']['client_secret'],
-                    scopes=SCOPES
-                )
+                secrets_data = load_secrets()
+                if secrets_data:
+                    refresh_token = secrets_data['web']['refresh_token']
+                    creds = google.oauth2.credentials.Credentials(
+                        token=None,
+                        refresh_token=refresh_token,
+                        client_id=secrets_data['web']['client_id'],
+                        client_secret=secrets_data['web']['client_secret'],
+                        scopes=SCOPES
+                    )
+                else:
+                    logger.error("Failed to load secrets data.")
+                    return
+                
             with open("token.json", "w") as token:
                 token.write(creds.to_json())
 
