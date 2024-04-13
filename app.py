@@ -426,7 +426,7 @@ def main(result, School, Grade, term, exam_type):
 
 
 if __name__ == "__main__":
-    main()
+    main(result, School, Grade, term, exam_type)
 
 
 
