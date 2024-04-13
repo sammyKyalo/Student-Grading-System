@@ -408,14 +408,22 @@ def save_result_to_google_sheet(result, School, Grade, term, exam_type, credenti
 
 def main(result, School, teacher_name, Grade, term, exam_type):
     try:
-        secrets = load_secrets()
-        if secrets is None:
-            return
-        
-        creds = google.oauth2.credentials.Credentials.from_authorized_user_info(
-        secrets['web'],
-        scopes=SCOPES
-       )
+        creds = None
+        if os.path.exists("token.json"):
+            creds = google.oauth2.credentials.Credentials.from_authorized_user_file("token.json", SCOPES)
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                creds = google.oauth2.credentials.Credentials(
+                    token=None,
+                    refresh_token=secrets['web']['refresh_token'],
+                    client_id=secrets['web']['client_id'],
+                    client_secret=secrets['web']['client_secret'],
+                    scopes=SCOPES
+                )
+            with open("token.json", "w") as token:
+                token.write(creds.to_json())
 
         if result is not None:
             save_result_to_google_sheet(result, School, Grade, term, exam_type, creds)
