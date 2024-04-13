@@ -5,4 +5,5 @@ openpyxl
 matplotlib
 seaborn
 logging
-sqlalchemy
+gspread
+oauth2client
