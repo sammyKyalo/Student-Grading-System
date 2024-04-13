@@ -351,11 +351,21 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 
 
+import os.path
+import pandas as pd
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+import logging
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SPREADSHEET_ID = '1dSlooUVS_hgm1C1xUyZ90kcYL7ZdMq0d-nKWrbz30Ls'
+
 
 def get_google_sheet(credentials):
     try:
@@ -366,6 +376,7 @@ def get_google_sheet(credentials):
     except Exception as e:
         logger.exception("Error while connecting to Google Sheet")
         return None
+
 
 def save_result_to_google_sheet(result, School, Grade, term, exam_type, credentials):
     sheet = get_google_sheet(credentials)
@@ -385,17 +396,38 @@ def save_result_to_google_sheet(result, School, Grade, term, exam_type, credenti
         logger.error("Failed to save data to Google Sheet. Connection failed.")
 
 
-
 def main(result, School, Grade, term, exam_type):
     try:
-        credentials = Credentials.from_service_account_file(r'C:\Users\ELITEBOOK\Desktop\Everything python\Student Grading System\client_secret_924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com.json', scopes=SCOPES)
-        save_result_to_google_sheet(result, School, Grade, term, exam_type, credentials)
+        creds = None
+        if os.path.exists("token.json"):
+            creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    r'C:\Users\ELITEBOOK\Desktop\Everything python\Student Grading System\credentials.json', SCOPES
+                )
+                creds = flow.run_local_server(port=0)
+            with open("token.json", "w") as token:
+                token.write(creds.to_json())
+        
+        if result is not None:
+            save_result_to_google_sheet(result, School, Grade, term, exam_type, creds)
+            st.session_state['result'] = result
+            st.session_state['School'] = School
+            st.session_state['Grade'] = Grade
+            st.session_state['term'] = term
+            st.session_state['exam_type'] = exam_type
+            
     except Exception as e:
         logger.exception("Error during main execution")
 
 
 
-main(pd.DataFrame(), 'School', 'Grade', 'term', 'exam_type')
+if __name__ == "__main__":
+    main()
+
 
 
 
