@@ -6,13 +6,14 @@ import time
 import logging
 import gspread
 import os
+import google.oauth2.credentials
 from oauth2client.service_account import ServiceAccountCredentials
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build 
 from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.oauth2.credentials import Credentials
+from google.oauth2.credentials import Credentials
 
 
 st.set_page_config(layout="wide")
@@ -342,14 +343,18 @@ hide_streamlit_style = """
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
+import logging
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-SCOPES = ['https://googleapis.com/auth/spreadsheets']
+
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SPREADSHEET_ID = '1dSlooUVS_hgm1C1xUyZ90kcYL7ZdMq0d-nKWrbz30Ls'
 
-
 CLIENT_CONFIG = {
-    "web": {
+    "installed": {
         "client_id": "924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com",
         "project_id": "grading-system-project",
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
@@ -358,10 +363,6 @@ CLIENT_CONFIG = {
         "client_secret": "GOCSPX-5DI1xMrVnZ1FvOGVms7Uv2opSxJ"
     }
 }
-
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-SPREADSHEET_ID = '1dSlooUVS_hgm1C1xUyZ90kcYL7ZdMq0d-nKWrbz30Ls'
-
 
 def get_google_sheet(credentials):
     try:
@@ -372,7 +373,6 @@ def get_google_sheet(credentials):
     except Exception as e:
         logger.error("Error while connecting to Google Sheet: %s", e)
         return None
-
 
 def save_result_to_google_sheet(result, School, Grade, term, exam_type, credentials):
     sheet = get_google_sheet(credentials)
@@ -390,14 +390,13 @@ def save_result_to_google_sheet(result, School, Grade, term, exam_type, credenti
     else:
         logger.error("Failed to save data to Google Sheet. Connection failed.")
 
-
 def main():
     try:
-        credentials = Credentials.from_client_config(CLIENT_CONFIG, scopes=SCOPES)
+        # Load the service account credentials from the key file
+        credentials = Credentials.from_service_account_file('C:\Users\ELITEBOOK\Desktop\Everything python\Student Grading System\client_secret_924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com.json', scopes=SCOPES)
         save_result_to_google_sheet(result, School, Grade, term, exam_type, credentials)
     except Exception as e:
         logger.error("Error during main execution: %s", e)
-
 
 if __name__ == "__main__":
     main()
