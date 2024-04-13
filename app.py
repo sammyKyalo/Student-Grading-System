@@ -412,11 +412,12 @@ def main(result, School, teacher_name, Grade, term, exam_type):
     try:
         creds = None
         if os.path.exists("token.json"):
-            creds = google.oauth2.credentials.Credentials.from_authorized_user_info(secrets_data, SCOPES)
+            creds = google.oauth2.credentials.Credentials.from_authorized_user_file("token.json", SCOPES)
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
+                # Load secrets from secrets.toml
                 secrets_data = load_secrets()
                 if secrets_data:
                     refresh_token = secrets_data['web']['refresh_token']
@@ -429,8 +430,8 @@ def main(result, School, teacher_name, Grade, term, exam_type):
                     )
                 else:
                     logger.error("Failed to load secrets data.")
-                    return
-                
+                    return  # Exit the function if secrets loading fails
+
             with open("token.json", "w") as token:
                 token.write(creds.to_json())
 
