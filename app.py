@@ -412,11 +412,11 @@ def main(result, School, teacher_name, Grade, term, exam_type):
         if secrets is None:
             return
         
-        creds = Credentials.from_client_config(
-            secrets['web'],
-            scopes=SCOPES
-        )
-        
+        creds = google.oauth2.credentials.Credentials.from_authorized_user_info(
+        secrets['web'],
+        scopes=SCOPES
+       )
+
         if result is not None:
             save_result_to_google_sheet(result, School, Grade, term, exam_type, creds)
             st.session_state['result'] = result
