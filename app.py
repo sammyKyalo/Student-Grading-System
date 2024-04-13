@@ -184,7 +184,11 @@ def page1():
             st.table(result)
 
             if result is not None:
-                save_result_to_google_sheet(result, School, Grade, term, exam_type)
+                st.session_state['result'] = result
+                st.session_state['School'] = School
+                st.session_state['Grade'] = Grade
+                st.session_state['term'] = term
+                st.session_state['exam_type'] = exam_type
 
             
 
