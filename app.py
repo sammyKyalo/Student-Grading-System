@@ -183,10 +183,10 @@ def page1():
             st.markdown("## 📝 Result Table", unsafe_allow_html=True)
             st.table(result)
 
+            if result is not None:
+                save_result_to_google_sheet(result, School, Grade, term, exam_type)
+
             
-
-
-                                
 
 def page2():
     st.markdown("""
