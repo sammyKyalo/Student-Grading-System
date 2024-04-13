@@ -16,6 +16,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2.credentials import Credentials
 from google.oauth2.service_account import Credentials
 from google.oauth2 import service_account
+import json
 
 st.set_page_config(layout="wide")
 
@@ -383,12 +384,16 @@ def save_result_to_google_sheet(result, School, Grade, term, exam_type, credenti
     else:
         logger.error("Failed to save data to Google Sheet. Connection failed.")
 
+
+
 def main(result, School, Grade, term, exam_type):
     try:
-        credentials = Credentials.from_service_account_file(st.secrets["google_service_account"], scopes=SCOPES)
+        service_account_info = json.loads('{"web":{"client_id":"924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com","project_id":"grading-system-project","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"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"}}')
+        credentials = service_account.Credentials.from_service_account_info(service_account_info['web'], scopes=SCOPES)
         save_result_to_google_sheet(result, School, Grade, term, exam_type, credentials)
     except Exception as e:
         logger.exception("Error during main execution")
+
 
 
 main(pd.DataFrame(), 'School', 'Grade', 'term', 'exam_type')
