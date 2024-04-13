@@ -158,7 +158,7 @@ def page1():
                return
         
             result = calculate_grades(data)
-            st.session_state['result'] = result 
+            main(result, School, teacher_name, Grade, term, exam_type)  
        
             col1, col2 = st.columns(2)
 
@@ -396,7 +396,7 @@ def save_result_to_google_sheet(result, School, Grade, term, exam_type, credenti
         logger.error("Failed to save data to Google Sheet. Connection failed.")
 
 
-def main(result, School, Grade, term, exam_type):
+def main(result, School, teacher_name, Grade, term, exam_type):
     try:
         creds = None
         if os.path.exists("token.json"):
@@ -423,10 +423,6 @@ def main(result, School, Grade, term, exam_type):
     except Exception as e:
         logger.exception("Error during main execution")
 
-
-
-if __name__ == "__main__":
-    main(result, School, Grade, term, exam_type)
 
 
 
