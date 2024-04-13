@@ -417,11 +417,13 @@ def main(result, School, teacher_name, Grade, term, exam_type):
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
+                secrets_data = secrets.load()
+                refresh_token = secrets_data['web']['refresh_token']
                 creds = google.oauth2.credentials.Credentials(
                     token=None,
-                    refresh_token=secrets['web']['refresh_token'],
-                    client_id=secrets['web']['client_id'],
-                    client_secret=secrets['web']['client_secret'],
+                    refresh_token=refresh_token,
+                    client_id=secrets_data['web']['client_id'],
+                    client_secret=secrets_data['web']['client_secret'],
                     scopes=SCOPES
                 )
             with open("token.json", "w") as token:
