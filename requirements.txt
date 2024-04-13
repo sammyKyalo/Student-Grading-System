@@ -7,4 +7,4 @@ seaborn
 logging
 gspread
 oauth2client
-googleapiclient
+google-api-python-client
