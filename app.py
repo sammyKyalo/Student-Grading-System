@@ -3,7 +3,9 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 import time
-from conn import get_connection, save_result_to_sql, create_table_if_not_exists
+from conn import save_result_to_google_sheet, get_connection, save_result_to_sql, create_table_if_not_exists
+
+
 
 
 st.set_page_config(layout="wide")
@@ -174,10 +176,13 @@ def page1():
             st.table(result)
 
             if st.session_state.get('result') is not None and School and Grade and term and exam_type:
-                connection = get_connection()
-                if connection:
-                    save_result_to_sql(result, School, Grade, term, exam_type)
-                    
+                result = st.session_state['result']
+
+                table_name = f"{School}_{Grade}_{term}_{exam_type}".replace(" ", "_").lower()
+            
+                save_result_to_google_sheet(result, table_name)
+
+                                
 
 
 def page2():
