@@ -429,13 +429,6 @@ def main(result, School, teacher_name, Grade, term, exam_type):
         logger.exception("Error during main execution")
 
 
-if __name__ == "__main__":
-    main()
-
-
-
-
-
 
 pages = {
     "Student Grade Calculator": page1,
