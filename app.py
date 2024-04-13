@@ -10,9 +10,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-CREDENTIALS_FILE = 'client_secret_924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com.json'
+CREDENTIALS_FILE = r'C:\Users\ELITEBOOK\Desktop\Everything python\Student Grading System\client_secret_924931594615-37sd840ffcnbd300lmlskh5bpp3q62k9.apps.googleusercontent.com.json'
 SHEET_NAME = 'results'
-
 
 def get_google_sheet():
     try:
