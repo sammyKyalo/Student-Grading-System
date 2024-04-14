@@ -384,6 +384,7 @@ def load_secrets():
         return None, None, None
 
 
+
 def get_google_sheet(credentials):
     try:
         service = build("sheets", "v4", credentials=credentials)
@@ -441,6 +442,7 @@ def main(result, School, teacher_name, Grade, term, exam_type):
             
     except Exception as e:
         logger.exception("Error during main execution")
+
 
 
 
