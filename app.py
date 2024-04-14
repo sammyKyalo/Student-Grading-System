@@ -195,7 +195,6 @@ def page1():
             row2.markdown(f"**Term:** {term}")
             row2.markdown(f"**Exam Type:** {exam_type}")
             st.markdown("## 📝 Result Table", unsafe_allow_html=True)
-            st.markdown("## 📝 Result Table", unsafe_allow_html=True)
             styled_result_table = result.rename(columns=lambda x: f"<span class='variable-names'>{x}</span>" if x in result.columns else x, inplace=False)
             st.write(styled_result_table.to_html(escape=False), unsafe_allow_html=True)
             if result is not None:
