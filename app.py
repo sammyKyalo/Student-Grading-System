@@ -422,8 +422,8 @@ def main(result, School, teacher_name, Grade, term, exam_type):
         client_id, client_secret, refresh_token = load_secrets()
         if not client_id or not client_secret or not refresh_token:
             logger.error("Failed to load secrets data.")
-            return  # Exit the function if secrets loading fails
-
+            return 
+        
         creds = google.oauth2.credentials.Credentials(
             token=None,
             refresh_token=refresh_token,
