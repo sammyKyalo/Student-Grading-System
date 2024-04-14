@@ -373,10 +373,15 @@ SPREADSHEET_ID = '1dSlooUVS_hgm1C1xUyZ90kcYL7ZdMq0d-nKWrbz30Ls'
 def load_secrets():
     try:
         with open("secrets.toml", "r") as file:
-            return toml.load(file)
+            secrets_data = toml.load(file)
+            web_secrets = secrets_data.get('web', {})
+            client_id = web_secrets.get('client_id')
+            client_secret = web_secrets.get('client_secret')
+            refresh_token = web_secrets.get('refresh_token')
+            return client_id, client_secret, refresh_token
     except FileNotFoundError:
         logger.error("secrets.toml file not found.")
-        return None
+        return None, None, None
 
 
 def get_google_sheet(credentials):
@@ -408,32 +413,23 @@ def save_result_to_google_sheet(result, School, Grade, term, exam_type, credenti
         logger.error("Failed to save data to Google Sheet. Connection failed.")
 
 
+
 def main(result, School, teacher_name, Grade, term, exam_type):
     try:
+        SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
         creds = None
-        if os.path.exists("token.json"):
-            creds = google.oauth2.credentials.Credentials.from_authorized_user_file("token.json", SCOPES)
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                # Load secrets from secrets.toml
-                secrets_data = load_secrets()
-                if secrets_data:
-                    refresh_token = secrets_data['web']['refresh_token']
-                    creds = google.oauth2.credentials.Credentials(
-                        token=None,
-                        refresh_token=refresh_token,
-                        client_id=secrets_data['web']['client_id'],
-                        client_secret=secrets_data['web']['client_secret'],
-                        scopes=SCOPES
-                    )
-                else:
-                    logger.error("Failed to load secrets data.")
-                    return  # Exit the function if secrets loading fails
+        client_id, client_secret, refresh_token = load_secrets()
+        if not client_id or not client_secret or not refresh_token:
+            logger.error("Failed to load secrets data.")
+            return  # Exit the function if secrets loading fails
 
-            with open("token.json", "w") as token:
-                token.write(creds.to_json())
+        creds = google.oauth2.credentials.Credentials(
+            token=None,
+            refresh_token=refresh_token,
+            client_id=client_id,
+            client_secret=client_secret,
+            scopes=SCOPES
+        )
 
         if result is not None:
             save_result_to_google_sheet(result, School, Grade, term, exam_type, creds)
