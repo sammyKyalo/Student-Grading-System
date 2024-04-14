@@ -446,6 +446,7 @@ def main(result, School, teacher_name, Grade, term, exam_type):
 
 
 
+
 pages = {
     "Student Grade Calculator": page1,
     "Student Performance Analysis": page2,
@@ -455,3 +456,6 @@ pages = {
 selected_page = st.sidebar.radio("Select your page:", tuple(pages.keys()))
 
 pages[selected_page]()
+
+
+
